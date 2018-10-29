@@ -1,7 +1,8 @@
 package controle;
 
-import modelo.Modelo;
 import modelo.Viagem;
+import modelo.Modelo;
+
 
 public class ControladorManterViagem extends ControleCRUD {
 

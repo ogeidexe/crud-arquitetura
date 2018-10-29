@@ -3,11 +3,8 @@ package visao;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.TrayIcon.MessageType;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -44,6 +41,7 @@ public abstract class JanelaCrudModelo extends JanelaBaseModelo {
 	private JButton btnNovo;
 	private JButton btnEditar;
 	private JButton btnCancelar;
+	private JButton btnRemover;
 	private JTextField textFieldCampoBusca;
 	private IControladorCRUD controlador;
 	private JComboBox comboBox;
@@ -169,7 +167,7 @@ public abstract class JanelaCrudModelo extends JanelaBaseModelo {
 		painelTopo.setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 0, 0)));
 		getPainelPrincipal().add(painelTopo, BorderLayout.NORTH);
 
-		lblTituloJanela = new JLabel("T\u00EDtulo da Janela");
+		lblTituloJanela = new JLabel("Titulo da Janela");
 		lblTituloJanela.setFont(new Font("Tahoma", Font.BOLD, 16));
 		painelTopo.add(lblTituloJanela);
 
@@ -219,7 +217,7 @@ public abstract class JanelaCrudModelo extends JanelaBaseModelo {
 				actionSalvar();
 			}
 		});
-		btnSalvar.setIcon(new ImageIcon(JanelaCrudModelo.class.getResource("/icons/Save.png")));
+		btnSalvar.setIcon(new ImageIcon(JanelaCrudModelo.class.getResource("/icons/Apply.png")));
 		toolBar.add(btnSalvar);
 		
 		btnCancelar = new JButton("Cancelar");
@@ -230,6 +228,17 @@ public abstract class JanelaCrudModelo extends JanelaBaseModelo {
 			public void actionPerformed(ActionEvent arg0) {
 				actionCancelar();
 				
+			}
+		});
+
+		btnRemover = new JButton("Rmover");
+		btnRemover.setIcon(new ImageIcon(JanelaCrudModelo.class.getResource("/icons/Delete.png")));
+		toolBar.add(btnRemover);
+		btnRemover.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				actionRemover();
+
 			}
 		});
 
@@ -346,7 +355,43 @@ public abstract class JanelaCrudModelo extends JanelaBaseModelo {
 		this.limpaCampos();
 		tabbedPane.setSelectedIndex(0);
 	}
-	
+
+	protected Retorno actionRemover(){
+
+        JTable tabela = getTabelaDados();
+        Modelo tab = getControlador().getNewObjeto();
+        int coluna = tab.getColunaPK();
+        int linha = tabela.getSelectedRow();
+        List<Object> list;
+        if(linha < 0){
+            JOptionPane.showMessageDialog(null, "Erro: Selecione uma linha antes de editar!");
+        }
+        int pk = (Integer) tabela.getValueAt(linha, coluna);
+        this.setPK(pk);
+        tab.setPk(pk);
+        Retorno retorno = getControlador().remover(tab);
+
+
+        if(retorno.isSucesso()){
+            JOptionPane.showMessageDialog(null, "deletado com sucesso!");
+            this.limpaCampos();
+            tabbedPane.setSelectedIndex(0);
+            tabelaDados.revalidate();
+            tabelaDados.repaint();
+
+            List<Modelo<?>> listResult = getControlador().procurar(tab);
+            TabelaJTableModel newModel = new TabelaJTableModel(listResult, tab);
+            getTabelaDados().setModel(newModel);
+
+
+        }else{
+            JOptionPane.showMessageDialog(null,"Erro:"+retorno.getMensagem());
+        }
+
+        return retorno;
+
+	}
+
 	public abstract void limpaCampos();
 	
 	public abstract List<Object> getFormularioValores();

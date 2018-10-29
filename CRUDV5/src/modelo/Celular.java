@@ -1,163 +1,205 @@
 package modelo;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import conversores.DateConversor;
 import conversores.IntegerConversor;
 import conversores.StringConversor;
 import interfaces.IConversor;
-import persistencia.DAOGeneric;
-import util.EstatusViagem;
+import sun.awt.image.IntegerComponentRaster;
 import util.Retorno;
 
-public class Celular extends Modelo<Integer> {
+import java.util.ArrayList;
+import java.util.List;
 
-	private String imei;
-	private String marca;
-	private String modelo;
-	private String cor;
-	private String ano;
+public class Celular extends Modelo<Integer>{
 
-	@Override
-	public List<Object> getCamposValor() {
+    private String imei;
+    private String marca;
+    private String modelo;
+    private String cor;
+    private String ano;
 
-		ArrayList<Object> list = new ArrayList<>();
+    /**
+     * Retorna o nome da tabela para ser usado para persisitir os dados
+     * @return
+     */
+    @Override
+    public String getModeloNome() {
+        return "Celulares";
+    }
 
-		list.add(this.getPk());
-		list.add(this.getImei());
-		list.add(this.getMarca());
-		list.add(this.getModelo());
-		list.add(this.getCor());
-		list.add(this.getAno());
+    /**
+     * Retorna o nome da chave primeira da tabela 'Celular'
+     * @return
+     */
+    @Override
+    public String getModeloPKNome() {
+        return "pk";
+    }
 
-		return list;
-	}
-	
-	@Override
-	public Modelo getNovoObjeto() {
-		return new Celular();
-	}
+    /**
+     * Retorna a lista de valor dos campos
+     * @return
+     */
+    @Override
+    public List<Object> getCamposValor() {
 
-	@Override
-	public List<String> getCamposNome(){
-		ArrayList<String> listNomes = new ArrayList<>();
-		listNomes.add("pk");
-		listNomes.add("dataSolicitacao");
-		listNomes.add("dataAprovacaoSolicitacao");
-		listNomes.add("dataPartida");
-		listNomes.add("dataAcerto");
-		listNomes.add("dataAprovacaoAcerto");
-		listNomes.add("estatus");
-		listNomes.add("motivo");
-		listNomes.add("dias");
-		listNomes.add("tipo");
-		return listNomes ;
-	}
+        ArrayList<Object> lista = new ArrayList<>();
 
-	@Override
-	protected Retorno setCamposValor(List<Object> list) {
-		Retorno ret = new Retorno(true, "OK");
-		try{
+        lista.add(this.getImei());
+        lista.add(this.getMarca());
+        lista.add(this.getModelo());
+        lista.add(this.getCor());
+        lista.add(this.getAno());
 
-			this.setPk((Integer) list.get(0));
-			this.setImei((String) list.get(1) );
-			this.setMarca((String) list.get(2) );
-			this.setModelo((String) list.get(3) );
-			this.setCor((String) list.get(4) );
-			this.setAno((String) list.get(5) );
+        lista.add(this.getPk());
 
-			//tem que tratar para dados estrangeiros
-			Tipo t = new Tipo();
-			t.setPk((Integer)list.get(9)); 
-			t = (Tipo) this.getDadosExtrangeiro(t);
-			
-			this.setTipo(t); 
-		}catch(Exception e){
-			ret.setSucesso(false);
-			ret.addMensagem("Erro ao configura campos, ERROR:"+e.getMessage());
-		}
-				
-		return ret;
-	}
+        return lista;
+    }
 
-	@Override
-	public String getModeloNome() {
-		return "Celulares";
-	}
+    /**
+     * Caso a chave primaria for serial retorna true
+     * Caso a chave primeira for auto increment retorna false
+     * @return
+     */
+    @Override
+    public boolean getUsarPkNaInsercao() {
+        return false;
+    }
 
-	@Override
-	public String getModeloPKNome() {
-		return "pk";
-	}
+    /**
+     * Metodo reposnsavel por converter os dados da visao para o tipo de dado do banco de dados
+     * @return
+     */
+    @Override
+    public List<IConversor> getCamposConversor() {
 
-	public String getImei() {
-		return imei;
-	}
+        List<IConversor> list = new ArrayList<>();
 
-	public void setImei(String imei) {
-		this.imei = imei;
-	}
 
-	public String getMarca() {
-		return marca;
-	}
+        list.add(new StringConversor());
 
-	public void setMarca(String marca) {
-		this.marca = marca;
-	}
+        list.add(new StringConversor());
+        list.add(new StringConversor());
+        list.add(new StringConversor());
+        list.add(new StringConversor());
 
-	public String getModelo() {
-		return modelo;
-	}
+        list.add(new IntegerConversor());
 
-	public void setModelo(String modelo) {
-		this.modelo = modelo;
-	}
 
-	public String getCor() {
-		return cor;
-	}
 
-	public void setCor(String cor) {
-		this.cor = cor;
-	}
+        return list;
+    }
 
-	public String getAno() {
-		return ano;
-	}
+    /**
+     * Retorna uma lista com os nomes dos campos
+     * @return
+     */
+    @Override
+    public List<String> getCamposNome() {
+        ArrayList<String> listaCampos = new ArrayList<>();
 
-	public void setAno(String ano) {
-		this.ano = ano;
-	}
+        listaCampos.add("imei");
+        listaCampos.add("marca");
+        listaCampos.add("modelo");
+        listaCampos.add("cor");
+        listaCampos.add("ano");
 
-	@Override
-	protected List<String> getCamposObrigatorios() {
-		List<String> list = new ArrayList<>();
-		list.add("dataSolicitacao");
-		list.add("dias");
-		return list;
-	}
+        listaCampos.add("pk");
 
-	@Override
-	public List<IConversor> getCamposConversor() {
-		ArrayList<IConversor> listConversor = new ArrayList<>();
-		listConversor.add(new IntegerConversor());//pk
-		listConversor.add(new DateConversor());
-		listConversor.add(new DateConversor());
-		listConversor.add(new DateConversor());
-		listConversor.add(new DateConversor());
-		listConversor.add(new DateConversor());
-		listConversor.add(new IntegerConversor());
-		listConversor.add(new StringConversor());
-		listConversor.add(new IntegerConversor());
-		listConversor.add(new IntegerConversor());
-		return listConversor ;
-	}
+        return listaCampos;
+    }
 
-	@Override
-	public boolean getUsarPkNaInsercao() {
-		return false;
-	}
+    /**
+     * Retorna os campos obrigatorios para preenchimento
+     * @return
+     */
+    @Override
+    protected List<String> getCamposObrigatorios() {
+
+        ArrayList<String> lista = new ArrayList<>();
+
+        lista.add("imei");
+        lista.add("marca");
+        lista.add("modelo");
+        lista.add("cor");
+        lista.add("ano");
+
+        return lista;
+    }
+
+    /**
+     * Usado para preencher o banco de dados ou a visao
+     * @param list
+     * @return
+     */
+    @Override
+    protected Retorno setCamposValor(List<Object> list) {
+        Retorno ret = new Retorno(true, "OK");
+
+        try{
+
+            this.setImei((String) list.get(0));
+            this.setMarca((String) list.get(1));
+            this.setModelo((String) list.get(2));
+            this.setCor((String) list.get(3));
+            this.setAno((String) list.get(4));
+
+            this.setPk((Integer) list.get(5));
+
+        }catch(Exception e){
+            ret.setSucesso(false);
+            ret.addMensagem("Erro ao configura campos, ERROR:"+e.getMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * Retorna um objeto do tipo celular
+     * @return
+     */
+    @Override
+    public Modelo<?> getNovoObjeto() {
+        return new Celular();
+    }
+
+
+    public String getImei() {
+        return imei;
+    }
+
+    public void setImei(String imei) {
+        this.imei = imei;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public String getCor() {
+        return cor;
+    }
+
+    public void setCor(String cor) {
+        this.cor = cor;
+    }
+
+    public String getAno() {
+        return ano;
+    }
+
+    public void setAno(String ano) {
+        this.ano = ano;
+    }
 }

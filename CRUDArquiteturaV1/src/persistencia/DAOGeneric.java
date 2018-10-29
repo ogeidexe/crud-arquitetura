@@ -56,7 +56,7 @@ public class DAOGeneric implements IDAO {
 	 * @param removerPKname
 	 *            remover a pk da lista.
 	 * @param desconsiderarValor
-	 *            não olhar se ter valor para incluir na lista
+	 *            nï¿½o olhar se ter valor para incluir na lista
 	 * @return
 	 */
 	private String getListaCamposNomes(Modelo<?> tab, boolean removerPKname, boolean desconsiderarValor) {
@@ -180,7 +180,7 @@ public class DAOGeneric implements IDAO {
 		if (campoValor != null && campoValor instanceof Modelo) {
 			Modelo tab_aux = (Modelo) campoValor;
 			if (tab_aux.getPk() != null) {
-				return  !validarVazioSeString(tab_aux.getPk());//se não for string retorna falso, só retorna verdadeiro se for string e for uma string vazia ""
+				return  !validarVazioSeString(tab_aux.getPk());//se nï¿½o for string retorna falso, sï¿½ retorna verdadeiro se for string e for uma string vazia ""
 			}
 		}
 		return false;
@@ -247,7 +247,7 @@ public class DAOGeneric implements IDAO {
 					Object valor = camposValores.get(ind);
 					if (valor == null || validarVazioSeString(valor)) {
 						ret.setSucesso(false);
-						ret.addMensagem("Campo:" + nomeCampo + " não está preenchido");
+						ret.addMensagem("Campo:" + nomeCampo + " nï¿½o estï¿½ preenchido");
 						//return ret;
 					}
 
@@ -309,8 +309,8 @@ public class DAOGeneric implements IDAO {
 		int indPS = 1;
 
 		for (Object valor : tab.getCamposValorUtil()) {
-			// só seta o valor se o indice não for o da pk
-			// Tratamento para só utilizar colunas preenchidas
+			// sï¿½ seta o valor se o indice nï¿½o for o da pk
+			// Tratamento para sï¿½ utilizar colunas preenchidas
 			if ((valor != null) && (indTab != indPk || usarPK)) {
 				valor = trataValoresEspeciaisObjetoParaBanco(valor);
 				ps.setObject(indPS, valor);
@@ -323,7 +323,7 @@ public class DAOGeneric implements IDAO {
 	}
 
 	/**
-	 * configura os valores do preparedstatement para inserção.
+	 * configura os valores do preparedstatement para inserï¿½ï¿½o.
 	 * 
 	 * @param tab
 	 * @param ps
@@ -385,7 +385,7 @@ public class DAOGeneric implements IDAO {
 		int indPS = 1;
 
 		for (String campoNome : tab.getCamposNome()) {
-			// só seta o valor se o indice não for o da pk
+			// sï¿½ seta o valor se o indice nï¿½o for o da pk
 			if ((tab.getCampoValor(campoNome) != null) && indTab != indPk) {
 				sqlSet = sqlSet + "," + campoNome + " = ? ";
 				indPS++;
@@ -446,10 +446,11 @@ public class DAOGeneric implements IDAO {
 	@Override
 	public Retorno remover(Modelo<?> objPk) {
 		if (objPk == null || objPk.getPk() == null) {
-			throw new RuntimeException("Defina a Modelo para usar DAOGenric.remover");
+			throw new RuntimeException("Defina o Modelo para usar DAOGenric.remover");
 		}
 		Retorno ret = new Retorno(true, null);
 		String sql = "delete from " + objPk.getModeloNome() + "" + " where " + objPk.getModeloPKNomeUtil() + " = ?";
+		System.out.println(sql);
 
 		try {
 			PreparedStatement ps = con.prepareStatement(sql);
@@ -458,11 +459,11 @@ public class DAOGeneric implements IDAO {
 			int ok = ps.executeUpdate();
 			if (ok != 1) {
 				ret.setSucesso(false);
-				ret.addMensagem("nenhuma linha excluída");
+				ret.addMensagem("nenhuma linha excluida");
 			}
 		} catch (SQLException e) {
 			ret.setSucesso(false);
-			ret.addMensagem("EERRO EXcluir:" + e.getMessage());
+			ret.addMensagem("EERRO ao excluir:" + e.getMessage());
 		}
 
 		return ret;

@@ -88,7 +88,9 @@ public class Tipo extends Modelo<Integer> {
 
 	@Override
 	public List<IConversor> getCamposConversor() {
+
 		List<IConversor> list = new ArrayList<>();
+
 		list.add(new IntegerConversor());
 		list.add(new StringConversor());
 		list.add(new BooleanConversor());

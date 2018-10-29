@@ -19,14 +19,16 @@ public abstract class Modelo<TIPOPK> {
 	}
 	
 	
-	/** retorno o nome da tabela para utilizar na persitência
+	/** retorno o nome da tabela para utilizar na persitencia
 	 * @return nome da tabela
 	 */
 	public abstract String getModeloNome();
+
 	/** retorno o nome da coluna da chave primaria
 	 * @return
 	 */
 	public abstract String getModeloPKNome();
+
 	/** retorna a lista de valor dos campos
 	 * @return
 	 */
@@ -39,7 +41,7 @@ public abstract class Modelo<TIPOPK> {
 	public Object getCampoValor(String nome) {
 		List<String> camposNome = this.getCamposNome();
 		if(!camposNome.contains(nome)) {
-			throw new RuntimeException("Campo: "+nome+" não existe na tabela:"+this.getModeloNome());
+			throw new RuntimeException("Campo: "+nome+" nao existe na tabela:"+this.getModeloNome());
 		}
 		List<Object> camposValor = this.getCamposValorUtil();
 		return camposValor.get(this.getCampoIndice(nome));
@@ -52,12 +54,12 @@ public abstract class Modelo<TIPOPK> {
 	public int getCampoIndice(String nome) {
 		int indice = this.getIndiceColuna(nome);
 		if(indice>=this.getCamposNome().size()) {
-			throw new RuntimeException("Coluna: "+nome+" Não pertence a tabela:"+this.getClass().getName());
+			throw new RuntimeException("Coluna: "+nome+" Nao pertence a tabela:"+this.getClass().getName());
 		}
 		return indice;
 	}
 	
-	/** retorna se é para utilizar a PK na inserção
+	/** retorna se ? para utilizar a PK na insercao
 	 * @return
 	 */
 	public abstract boolean getUsarPkNaInsercao();
@@ -72,7 +74,7 @@ public abstract class Modelo<TIPOPK> {
 		List<IConversor> list = this.getCamposConversor();
 		if(list.size()!=this.getNumerosCampos()){
 			
-			String msg = "O Método "+this.getClass().getName()+".getCamposConversor()"
+			String msg = "O M?todo "+this.getClass().getName()+".getCamposConversor()"
 					+ " deveria retornar uma lista com "+this.getNumerosCampos()
 					+ " item/itens e retornou com "+list.size()+" item/itens!";
 			throw new RuntimeException(msg);
@@ -91,9 +93,9 @@ public abstract class Modelo<TIPOPK> {
 				return pkNome;
 			}
 		}
-		String msg = "O Método "+this.getClass().getName()+".getTabelaPKNome()"
-				+ " está retornando um nome de coluna que não existe, "
-				+ " valor retornado:"+pkNome+ " valores válidos: "+String.join(",",this.getCamposNome());
+		String msg = "O M?todo "+this.getClass().getName()+".getTabelaPKNome()"
+				+ " est? retornando um nome de coluna que n?o existe, "
+				+ " valor retornado:"+pkNome+ " valores v?lidos: "+String.join(",",this.getCamposNome());
 		throw new RuntimeException(msg);
 		
 	}
@@ -101,7 +103,7 @@ public abstract class Modelo<TIPOPK> {
 		List<Object> list = this.getCamposValor();
 		if(list.size()!=this.getNumerosCampos()){
 			
-			String msg = "O Método "+this.getClass().getName()+".getCamposValor()"
+			String msg = "O M?todo "+this.getClass().getName()+".getCamposValor()"
 					+ " deveria retornar uma lista com "+this.getNumerosCampos()
 					+ " item/itens e retornou com "+list.size()+" item/itens!";
 			throw new RuntimeException(msg);
@@ -116,7 +118,7 @@ public abstract class Modelo<TIPOPK> {
 	public abstract List<String> getCamposNome();
 	
 	protected abstract List<String> getCamposObrigatorios();
-	/*{//Seria necessário se não quisesse quebra o código
+	/*{//Seria necess?rio se n?o quisesse quebra o c?digo
 		List<String> list = new ArrayList<String>();
 		return list;
 	}*/
@@ -136,7 +138,7 @@ public abstract class Modelo<TIPOPK> {
 			if(encontrou== false){
 				throw new RuntimeException(
 						"Campo "+campoNome+
-						" não é um nome válido para:"+
+						" n?o ? um nome v?lido para:"+
 								this.getClass().getName());
 			}
 		}
@@ -144,7 +146,7 @@ public abstract class Modelo<TIPOPK> {
 				
 	}
 	/** metodo para configurar os valores do objeto.
-	 * ele só é chamado se a lista tiver o número correto de valores
+	 * ele s? ? chamado se a lista tiver o n?mero correto de valores
 	 * @param list
 	 * @return
 	 */
@@ -159,12 +161,12 @@ public abstract class Modelo<TIPOPK> {
 		Retorno ret = new Retorno(true,"");
 		if(list==null){
 			ret.setSucesso(false);
-			ret.addMensagem("Necessário passar a lista de valores para configura objeto");
+			ret.addMensagem("Necess?rio passar a lista de valores para configura objeto");
 			return ret;
 		}
 		if(list.size()!=this.getNumerosCampos()){
 			ret.setSucesso(false);
-			ret.addMensagem("Necessário passar a lista de valores para configura objeto com " + this.getNumerosCampos());
+			ret.addMensagem("Necessario passar a lista de valores para configura objeto com " + this.getNumerosCampos());
 			return ret;
 		}
 		//metodo abstrato que realmente configura os valores
@@ -178,7 +180,7 @@ public abstract class Modelo<TIPOPK> {
 					valor = listaConversores.get(i).converter((String)valor);
 				}catch(RuntimeException e){
 					ret = new Retorno(false,
-							"Erro de Conversão no campo:"+listaCamposNomes.get(i)+", ERRO:"+e.getMessage());
+							"Erro de Convers?o no campo:"+listaCamposNomes.get(i)+", ERRO:"+e.getMessage());
 					return ret;
 					
 				}

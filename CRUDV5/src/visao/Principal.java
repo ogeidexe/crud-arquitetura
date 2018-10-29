@@ -1,6 +1,7 @@
 package visao;
 import javax.swing.JButton;
 
+import controle.ControladorManterCelular;
 import controle.ControladorManterTipo;
 import controle.ControladorManterViagem;
 
@@ -33,7 +34,16 @@ public class Principal extends JanelaPrincipalModelo {
 		});
 		btnViagem.setIcon(new ImageIcon(Principal.class.getResource("/icons/Paste.png")));
 		getToolBar().add(btnViagem);
-		
+
+		JButton btnCelular = new JButton("Celular");
+		btnCelular.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				abrirJanelaManterCelular();
+			}
+		});
+		btnCelular.setIcon(new ImageIcon(Principal.class.getResource("/icons/Add.png")));
+		getToolBar().add(btnCelular);
+
 		JMenuItem mntmManterViagem = new JMenuItem("Manter Viagem");
 		mntmManterViagem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -54,10 +64,14 @@ public class Principal extends JanelaPrincipalModelo {
 	public void abrirJanelaManterTipo() {
 		new JanelaManterTipo(new ControladorManterTipo()).setVisible(true);
 	}
+
 	public void abrirJanelaManterViagem() {
 		new JanelaManterViagem(new ControladorManterViagem()).setVisible(true);
 	}
 
+	public void abrirJanelaManterCelular(){
+		new JanelaManterCelular(new ControladorManterCelular()).setVisible(true);
+	}
 	public static void main(String[] args) {
 		Principal janela  = new Principal();
 		janela.setVisible(true);

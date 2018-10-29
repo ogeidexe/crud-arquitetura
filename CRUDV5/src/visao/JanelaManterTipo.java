@@ -76,7 +76,9 @@ public class JanelaManterTipo extends JanelaCrudModelo {
 
 	@Override
 	public void setValoresFormulario(List<Object> valores) {
+
 		getTextFieldNome().setText((String) valores.get(1));
+
 		if(valores.get(2) != null && (Boolean) valores.get(2) == true){
 			getComboBoxAtivo().setSelectedIndex(0);
 		}

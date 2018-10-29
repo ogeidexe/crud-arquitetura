@@ -41,8 +41,8 @@ public abstract class ControleCRUD implements IControladorCRUD {
 
 	@Override
 	public Retorno remover(Modelo<?> objPk) {
-		// TODO Auto-generated method stub
-		return null;
+		Retorno retorno = dao.remover(objPk);
+		return retorno;
 	}
 
 	@Override

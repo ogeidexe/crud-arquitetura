@@ -11,7 +11,7 @@ public class IntegerConversor implements IConversor {
 		try{
 			retorno = Integer.parseInt(valor);
 		}catch (NumberFormatException e) {
-			throw new RuntimeException("Erro conversão:"+e.getMessage());
+			throw new RuntimeException("Erro convers?o:"+e.getMessage());
 		}
 		return retorno;
 	}
